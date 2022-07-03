@@ -50,21 +50,20 @@ export class MessageCreateListener extends Listener {
 			const msgs = await msg.channel.messages.fetch();
 			(msg.channel as TextChannel).bulkDelete(msgs.filter((m) => m.author.id === msg.client.user!.id));
 			if (msg.system) {
-				msg.channel.send(
-					`${msg.author} Thank you for boosting!, make a ticket in <#${config.ticketChannel}> to claim your perks.`
-				);
-			}
-			const embed = new MessageEmbed().setColor('#e659f3').setTitle('Boost Perks');
-
-			const button = new MessageButton()
+				const button = new MessageButton()
 				.setStyle('LINK')
 				.setURL(`${config.boostPerks}`)
 				.setEmoji(`${emotes.boost}`)
-				.setLabel('Click here');
+				.setLabel('Boost Perks');
+				// const embed = new MessageEmbed().setColor('#e659f3').setTitle('Boost Perks');
 
-			const comp = new MessageActionRow().setComponents([button]);
-
-			msg.channel.send({ embeds: [embed], components: [comp] });
+				const comp = new MessageActionRow().setComponents([button]);
+				msg.channel.send({
+					content: `${msg.author} Thank you for boosting!, make a ticket in <#${config.ticketChannel}> to claim your perks.`,
+					// embeds: [embed],
+					components: [comp]
+				});
+			}
 		}
 
 		if (this.inviteRegex.test(msg.content) && !this.isTicket(msg.channel) && !this.isStaff(msg.member!)) {
